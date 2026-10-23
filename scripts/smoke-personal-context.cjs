@@ -1,0 +1,95 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const os = require('node:os');
+const path = require('node:path');
+const { app } = require('electron');
+app.whenReady().then(async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'copilot-personal-context-'));
+  process.env.INTERVIEW_COPILOT_DATA_DIR = path.join(directory, 'data');
+  process.env.INTERVIEW_COPILOT_REFERENCE_DIR = path.resolve('knowledge/reference');
+  process.env.CODEX_TRANSPORT = 'exec';
+  process.env.CODEX_ENABLED = 'true';
+  try {
+    const count = path.join(directory, 'calls');
+    const promptFile = path.join(directory, 'prompt');
+    const fake = path.join(directory, 'codex.cjs');
+    await fs.writeFile(fake, `#!/usr/bin/env node
+const fs = require('node:fs');
+const args = process.argv.slice(2);
+let prompt = '';
+process.stdin.on('data', chunk => prompt += chunk);
+process.stdin.on('end', () => {
+  fs.appendFileSync(${JSON.stringify(count)}, 'call\\n');
+  fs.writeFileSync(${JSON.stringify(promptFile)}, prompt);
+  fs.writeFileSync(args[args.indexOf('-o') + 1], '## My recent project\\n\\nI led a Jira-driven campaign automation platform at Eli Lilly.');
+});
+`);
+    await fs.chmod(fake, 0o700);
+    process.env.CODEX_CLI_PATH = fake;
+    const personal = require('../dist/main/services/personalContextService');
+    const { prepareAnswer } = require('../dist/main/services/answerService');
+    const { searchNotes } = require('../dist/main/services/knowledgeService');
+    const foreignExample = [{ fileName: 'Reference · others.md', source: 'reference', sourceLabel: 'Generic reference', score: 10, content: 'I worked at KPMG as Durga Prasad.' }];
+    for (const question of ['Describe your last project', 'Describe your last design', 'Design an end-to-end system that you built', 'Describe a scalable product you developed', 'Describe the last project']) {
+      assert.equal(personal.needsPersonalSynthesis(question), true, question);
+      const result = await prepareAnswer(question, foreignExample);
+      assert.equal(result.generationMode, 'codex');
+      assert.ok(result.snippets.some(source => source.fileName === 'personal.md' && source.source === 'personal'));
+      const prompt = await fs.readFile(promptFile, 'utf8');
+      assert.match(prompt, /Ganesh/);
+      assert.match(prompt, /SharesEye/);
+      assert.match(prompt, /13,000 engineering hours/);
+      assert.match(prompt, /first person/);
+      assert.match(prompt, /Do not invent technologies/);
+      assert.match(prompt, /conditional language/);
+      assert.doesNotMatch(prompt, /KPMG|Durga Prasad/);
+    }
+    const countCalls = async () => (await fs.readFile(count, 'utf8')).trim().split('\n').length;
+    const before = await countCalls();
+    await prepareAnswer('Describe your last project', foreignExample);
+    assert.equal(await countCalls(), before, 'Same evidence should reuse the cached answer');
+    await fs.mkdir(path.join(directory, 'data', 'notes'), { recursive: true });
+    await fs.writeFile(path.join(directory, 'data', 'notes', 'resume-update.md'), '# Updated personal experience\nI developed a documented onboarding workflow in my recent role.');
+    await prepareAnswer('Describe your last project', foreignExample);
+    assert.equal(await countCalls(), before + 1, 'Updating resume evidence must invalidate the answer cache');
+    assert.match(await fs.readFile(promptFile, 'utf8'), /documented onboarding workflow/);
+    const technical = await prepareAnswer('What is React?', await searchNotes('What is React?'));
+    assert.equal(technical.generationMode, 'reference');
+    const jd = require('../dist/main/services/jobDescriptionService');
+    assert.equal(await jd.getJobDescription(), '');
+    await assert.rejects(jd.saveJobDescription({ bad: true }));
+    await assert.rejects(jd.saveJobDescription('x'.repeat(24001)));
+    await jd.saveJobDescription('  Senior React Engineer: accessible UI, performance and technical leadership.  ');
+    assert.equal(await jd.getJobDescription(), 'Senior React Engineer: accessible UI, performance and technical leadership.');
+    const jdTechnical = await prepareAnswer('What is React?', await searchNotes('What is React?'));
+    assert.equal(jdTechnical.generationMode, 'codex');
+    let rolePrompt = await fs.readFile(promptFile, 'utf8');
+    assert.match(rolePrompt, /Senior React Engineer/);
+    assert.match(rolePrompt, /Relevant local sources/);
+    assert.match(rolePrompt, /Never treat job requirements as skills or achievements/);
+    const jdCalls = await countCalls();
+    await prepareAnswer('What is React?', await searchNotes('What is React?'));
+    assert.equal(await countCalls(), jdCalls);
+    await jd.saveJobDescription('Backend engineer: Java, distributed systems and reliability.');
+    await prepareAnswer('What is React?', await searchNotes('What is React?'));
+    assert.equal(await countCalls(), jdCalls + 1, 'Changed JD must invalidate CLI cache');
+    await prepareAnswer('Describe your last project', foreignExample);
+    rolePrompt = await fs.readFile(promptFile, 'utf8');
+    assert.match(rolePrompt, /Backend engineer/);
+    assert.match(rolePrompt, /Ganesh/);
+    assert.doesNotMatch(rolePrompt, /Durga Prasad/);
+    await jd.saveJobDescription('');
+    assert.equal(await jd.getJobDescription(), '');
+    assert.equal((await prepareAnswer('What is React?', await searchNotes('What is React?'))).generationMode, 'reference');
+    assert.equal(personal.isPersonalExperienceQuestion('Design a scalable URL shortener'), false);
+    assert.equal(personal.needsPersonalSynthesis('Tell me about your previous GEICO experience'), false);
+    process.env.CODEX_ENABLED = 'false';
+    delete process.env.OPENAI_API_KEY;
+    const offline = await prepareAnswer('Describe your last project', []);
+    assert.equal(offline.generationMode, 'local');
+    assert.ok(offline.snippets.length);
+    assert.doesNotMatch(offline.answer, /could not find relevant context/i);
+    console.log('PASS: broad personal-question routing, resume passed to CLI, first-person grounding, no foreign profile, evidence-aware cache, refreshed imports, technical references and offline fallback.');
+  } catch (error) { console.error(error); process.exitCode = 1; }
+  finally { await fs.rm(directory, { recursive: true, force: true }); app.exit(process.exitCode || 0); }
+});

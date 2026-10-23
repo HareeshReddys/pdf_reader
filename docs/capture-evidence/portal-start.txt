@@ -1,0 +1,14 @@
+AvailableSourceTypes: 3
+Request: /org/freedesktop/portal/desktop/request/1_487/copilot_8d20dd60f14b4291ab17bff3d41609a7
+Response: {'code': 0, 'results': dbus.Dictionary({dbus.String('session_handle'): dbus.String('/org/freedesktop/portal/desktop/session/1_487/session_84049736ab9148a0ada27bb7ba247fc8', variant_level=1)}, signature=dbus.Signature('sv'))}
+Request: /org/freedesktop/portal/desktop/request/1_487/copilot_c925d19fb30f4cc780cfa5f7615149d8
+Response: {'code': 0, 'results': dbus.Dictionary({}, signature=dbus.Signature('sv'))}
+Request: /org/freedesktop/portal/desktop/request/1_487/copilot_38d8b486a8704989ba7432c535944fac
+/home/palani-venkatesh/Desktop/InterviewAssist/experiments/pipewire-capture/probe.py:33: Warning: Source ID 17 was not found when attempting to remove it
+  finally:match.remove();GLib.source_remove(timer)
+Traceback (most recent call last):
+  File "/home/palani-venkatesh/Desktop/InterviewAssist/experiments/pipewire-capture/probe.py", line 42, in <module>
+    result=request(portal.Start,dbus.ObjectPath(session),'')
+  File "/home/palani-venkatesh/Desktop/InterviewAssist/experiments/pipewire-capture/probe.py", line 29, in request
+    raise RuntimeError('Timed out waiting for portal response/source selection')
+RuntimeError: Timed out waiting for portal response/source selection

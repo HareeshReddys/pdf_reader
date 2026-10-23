@@ -1,0 +1,211 @@
+.screenshot-panel {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #d9e3de;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #17241f;
+}
+
+.screenshot-panel__heading,
+.screenshot-panel__controls,
+.screenshot-panel__error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.screenshot-panel__heading h2,
+.screenshot-panel__heading p,
+.screenshot-panel__preview h3,
+.screenshot-panel__preview p,
+.screenshot-panel__text h3,
+.screenshot-panel__text p,
+.screenshot-panel__help {
+  margin: 0;
+}
+
+.screenshot-panel__heading h2 {
+  margin-top: 3px;
+  font-size: 20px;
+}
+
+.screenshot-panel__eyebrow {
+  color: #26765a;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.screenshot-panel__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #617068;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.screenshot-panel__status > span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #4d987d;
+}
+
+.screenshot-panel__status--loading-sources > span,
+.screenshot-panel__status--capturing > span {
+  background: #c88a19;
+  animation: screenshot-panel-pulse 1.3s ease-in-out infinite;
+}
+
+.screenshot-panel__help {
+  color: #63736b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.screenshot-panel__controls {
+  justify-content: flex-start;
+  padding: 14px;
+  border-radius: 12px;
+  background: #f4f7f5;
+}
+
+.screenshot-panel__controls label {
+  display: grid;
+  flex: 1;
+  gap: 5px;
+  min-width: 220px;
+  color: #526159;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.screenshot-panel__controls select {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid #cbd8d1;
+  border-radius: 9px;
+  padding: 0 10px;
+  background: #ffffff;
+  color: #20342b;
+  font: inherit;
+  font-size: 13px;
+}
+
+.screenshot-panel__button,
+.screenshot-panel__error button {
+  border: 1px solid transparent;
+  border-radius: 9px;
+  padding: 9px 13px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.screenshot-panel__button--capture {
+  align-self: flex-end;
+  background: #157557;
+  color: #ffffff;
+}
+
+.screenshot-panel__button--secondary {
+  align-self: flex-end;
+  border-color: #bdd2c8;
+  background: #ffffff;
+  color: #245f4b;
+}
+
+.screenshot-panel__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.screenshot-panel__error {
+  padding: 11px 13px;
+  border: 1px solid #edc7c7;
+  border-radius: 10px;
+  background: #fff5f5;
+  color: #862727;
+  font-size: 13px;
+}
+
+.screenshot-panel__error button {
+  padding: 5px 8px;
+  border-color: #dcaeae;
+  background: transparent;
+  color: inherit;
+}
+
+.screenshot-panel__output-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+  gap: 12px;
+}
+
+.screenshot-panel__preview,
+.screenshot-panel__text {
+  min-height: 150px;
+  overflow: hidden;
+  border: 1px solid #e0e7e3;
+  border-radius: 11px;
+}
+
+.screenshot-panel__preview h3,
+.screenshot-panel__text h3 {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e5ebe8;
+  font-size: 13px;
+}
+
+.screenshot-panel__preview img {
+  display: block;
+  width: 100%;
+  max-height: 250px;
+  object-fit: contain;
+  background: #101814;
+}
+
+.screenshot-panel__preview p,
+.screenshot-panel__text p {
+  padding: 14px;
+  color: #33473e;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.screenshot-panel__text p {
+  max-height: 250px;
+  overflow: auto;
+}
+
+.screenshot-panel__placeholder {
+  color: #7c8982 !important;
+}
+
+@keyframes screenshot-panel-pulse {
+  50% { transform: scale(0.72); }
+}
+
+@media (max-width: 760px) {
+  .screenshot-panel__heading,
+  .screenshot-panel__controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .screenshot-panel__button--capture,
+  .screenshot-panel__button--secondary {
+    align-self: auto;
+  }
+
+  .screenshot-panel__output-grid {
+    grid-template-columns: 1fr;
+  }
+}

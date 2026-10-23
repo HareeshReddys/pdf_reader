@@ -1,0 +1,4 @@
+Stream: /org/gnome/Mutter/ScreenCast/Stream/u2
+Parameters: dbus.Dictionary({dbus.String('Parameters'): dbus.Dictionary({dbus.String('position'): dbus.Struct((dbus.Int32(3840), dbus.Int32(1238)), signature=None, variant_level=1), dbus.String('size'): dbus.Struct((dbus.Int32(1920), dbus.Int32(1080)), signature=None, variant_level=1)}, signature=dbus.Signature('sv'), variant_level=1)}, signature=dbus.Signature('sv'))
+PipeWire node: 39
+FRAME: capture-tests/mutter-monitor.png 1920 1080

@@ -1,0 +1,180 @@
+CAPTURE ENVIRONMENT DIAGNOSTICS
+UTC: 2026-10-03T15:44:48Z
+
+$ cat /etc/os-release
+PRETTY_NAME="Ubuntu 22.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.5 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+
+$ uname -r
+6.8.0-124-generic
+
+Desktop: ubuntu:GNOME
+Session: x11
+DISPLAY: :0
+WAYLAND_DISPLAY: unset
+
+$ gnome-shell --version
+GNOME Shell 42.9
+
+$ node --version
+v20.11.1
+
+Electron bundled versions:
+{"electron":"41.6.1","chromium":"146.0.7680.216","node":"24.15.0"}
+
+$ pipewire --version
+pipewire
+Compiled with libpipewire 0.3.48
+Linked with libpipewire 0.3.48
+
+$ wireplumber --version
+[tool not installed]
+
+$ dpkg-query -W -f=\$\{binary:Package\}\ \$\{db:Status-Abbrev\}\ \$\{Version\}\\n xdg-desktop-portal\* pipewire wireplumber pipewire-media-session google-chrome-stable zoom discord teams obs-studio gnome-screenshot
+dpkg-query: no packages found matching zoom
+dpkg-query: no packages found matching discord
+dpkg-query: no packages found matching teams
+dpkg-query: no packages found matching obs-studio
+dpkg-query: no packages found matching gnome-screenshot
+google-chrome-stable ii  148.0.7778.178-1
+pipewire:amd64 ii  0.3.48-1ubuntu3.2
+pipewire-media-session ii  0.4.1-2ubuntu1
+wireplumber un  
+xdg-desktop-portal ii  1.14.4-1ubuntu2~22.04.2
+xdg-desktop-portal-backend un  
+xdg-desktop-portal-gnome ii  42.1-0ubuntu2
+xdg-desktop-portal-gtk ii  1.14.0-1build1
+[unavailable or command failed]
+
+Capture-related processes (names only, no URLs/arguments):
+    PID    PPID COMMAND
+   1824    1814 pipewire
+   1825    1814 pipewire-media-
+   1846    1843 Xorg
+   2123    1814 gnome-shell
+   2157    1814 gnome-shell-cal
+   2365    1814 ibus-portal
+ 199030    1814 chrome
+ 199039    1814 chrome_crashpad
+ 199041    1814 chrome_crashpad
+ 199047  199030 chrome
+ 199048  199030 chrome
+ 199050  199048 chrome
+ 199074  199047 chrome
+ 199075  199030 chrome
+ 199088  199050 chrome
+ 199114  199050 chrome
+ 199240  199050 chrome
+ 199354  199050 chrome
+ 199456  199050 chrome
+ 199518  199030 chrome
+ 203109  199030 chrome
+ 204800    1814 chrome_crashpad
+ 236486  199050 chrome
+ 236642  199050 chrome
+ 237062  199050 chrome
+ 237071  199050 chrome
+ 237352  199050 chrome
+ 238893  199050 chrome
+ 238902  199050 chrome
+ 258147  199050 chrome
+ 388790  199050 chrome
+ 451947  199050 chrome
+ 458328  458321 electron
+ 458331  458328 electron
+ 458332  458328 electron
+ 458334  458332 electron
+ 458360  458331 electron
+ 458370  458328 electron
+ 458388  458334 electron
+ 458506  458328 electron
+ 458964  199050 chrome
+ 458977  199050 chrome
+ 461095  199050 chrome
+ 461109  199050 chrome
+ 461165  199050 chrome
+ 469202  199050 chrome
+
+Portal service owners:
+NAME                                            PID PROCESS         USER             CONNECTION    UNIT              SESSION DESCRIPTION
+org.freedesktop.impl.portal.PermissionStore    1862 xdg-permission- palani-venkatesh :1.6          user@1000.service -       -
+org.freedesktop.impl.portal.Secret                - -               -                (activatable) -                 -       -
+org.freedesktop.impl.portal.desktop.gnome      2338 xdg-desktop-por palani-venkatesh :1.77         user@1000.service -       -
+org.freedesktop.impl.portal.desktop.gtk        2923 xdg-desktop-por palani-venkatesh :1.83         user@1000.service -       -
+org.freedesktop.portal.Desktop                 2275 xdg-desktop-por palani-venkatesh :1.53         user@1000.service -       -
+org.gnome.Mutter.ScreenCast                    2123 gnome-shell     palani-venkatesh :1.35         user@1000.service -       -
+
+$ gdbus call --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --method org.freedesktop.DBus.Properties.Get org.freedesktop.portal.ScreenCast AvailableSourceTypes
+(<uint32 3>,)
+
+$ gdbus call --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --method org.freedesktop.DBus.Properties.Get org.freedesktop.portal.ScreenCast version
+(<uint32 4>,)
+
+$ pw-cli list-objects Node
+	id 28, type PipeWire:Interface:Node/3
+ 		object.serial = "28"
+ 		factory.id = "10"
+ 		priority.driver = "20000"
+ 		node.name = "Dummy-Driver"
+	id 29, type PipeWire:Interface:Node/3
+ 		object.serial = "29"
+ 		factory.id = "10"
+ 		priority.driver = "19000"
+ 		node.name = "Freewheel-Driver"
+	id 35, type PipeWire:Interface:Node/3
+ 		object.serial = "35"
+ 		object.path = "v4l2:/dev/video0"
+ 		factory.id = "10"
+ 		client.id = "32"
+ 		device.id = "33"
+ 		node.description = "Integrated Camera"
+ 		node.name = "v4l2_input.pci-0000_00_14.0-usb-0_6_1.0"
+ 		media.class = "Video/Source"
+ 		media.role = "Camera"
+
+X server:
+name of display:    :0
+vendor string:    The X.Org Foundation
+vendor release number:    12101004
+X.Org version: 1.21.1.4
+    Composite
+    DAMAGE
+    RANDR
+    XFIXES
+
+Portal backend definitions:
+/usr/share/xdg-desktop-portal/portals/gnome-keyring.portal
+DBusName=org.freedesktop.secrets
+Interfaces=org.freedesktop.impl.portal.Secret
+UseIn=gnome
+/usr/share/xdg-desktop-portal/portals/gnome-shell.portal
+DBusName=org.gnome.Shell.Portal
+Interfaces=org.freedesktop.impl.portal.Access
+UseIn=gnome
+/usr/share/xdg-desktop-portal/portals/gnome.portal
+DBusName=org.freedesktop.impl.portal.desktop.gnome
+Interfaces=org.freedesktop.impl.portal.Account;org.freedesktop.impl.portal.AppChooser;org.freedesktop.impl.portal.Screenshot;org.freedesktop.impl.portal.ScreenCast;org.freedesktop.impl.portal.RemoteDesktop;org.freedesktop.impl.portal.Lockdown;org.freedesktop.impl.portal.Background;org.freedesktop.impl.portal.Settings;org.freedesktop.impl.portal.Wallpaper;org.freedesktop.impl.portal.FileChooser;org.freedesktop.impl.portal.Print;
+UseIn=gnome
+/usr/share/xdg-desktop-portal/portals/gtk.portal
+DBusName=org.freedesktop.impl.portal.desktop.gtk
+Interfaces=org.freedesktop.impl.portal.FileChooser;org.freedesktop.impl.portal.AppChooser;org.freedesktop.impl.portal.Print;org.freedesktop.impl.portal.Notification;org.freedesktop.impl.portal.Inhibit;org.freedesktop.impl.portal.Access;org.freedesktop.impl.portal.Account;org.freedesktop.impl.portal.Email;org.freedesktop.impl.portal.DynamicLauncher;org.freedesktop.impl.portal.Lockdown;org.freedesktop.impl.portal.Settings;
+UseIn=gnome
+
+Electron X clients (PID and class only):
+
+CAPTURE ENVIRONMENT SUMMARY
+Session: native X11 (Xorg process and session type confirmed)
+Desktop: ubuntu:GNOME
+PipeWire: running (not evidence of screen capture)
+Possible capture paths: X11 if X clients exist; portal/PipeWire if ScreenCast query succeeded.
+Native window exclusion: not established. App-specific active capture paths: not established by this inventory.

@@ -1,0 +1,5 @@
+Stream: /org/gnome/Mutter/ScreenCast/Stream/u3
+Parameters: dbus.Dictionary({dbus.String('Parameters'): dbus.Dictionary({}, signature=dbus.Signature('sv'), variant_level=1)}, signature=dbus.Signature('sv'))
+PipeWire node: 39
+PIPELINE ERROR: (gerror=GLib.Error('Internal data stream error.', 'gst-stream-error-quark', 1), debug='../libs/gst/base/gstbasesrc.c(3127): gst_base_src_loop (): /GstPipeline:pipeline0/GstPipeWireSrc:pipewiresrc0:\nstreaming stopped, reason not-negotiated (-4)')
+Probe timeout; no further frame demonstrated

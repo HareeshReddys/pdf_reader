@@ -1,0 +1,7 @@
+.knowledge-search-panel { display: grid; gap: 9px; margin: 0 auto 18px; max-width: 850px; padding: 13px 15px; border: 1px solid #dce4df; border-radius: 11px; background: #f9fbf9; }
+.knowledge-search-panel > div:first-child { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; }
+.knowledge-search-panel > div:first-child span, .knowledge-search-panel small { color: #6d7972; font-size: 9px; }
+.knowledge-search-actions { display: flex; gap: 7px; }
+.knowledge-search-actions button { padding: 6px 9px; border: 1px solid #b9cbc1; border-radius: 7px; color: #176c4f; background: white; cursor: pointer; font-size: 9px; font-weight: 750; }
+.knowledge-search-actions button.is-clear { color: #8b4949; }
+.knowledge-search-panel p { margin: 0; color: #a13d3d; font-size: 10px; }

@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+data/notes/*
+!data/notes/.gitkeep
+
+capture-tests/
+experiments/**/__pycache__/
+
+data/protected-browser-profile/
+data/logs/
+data/runtime/
+data/setup/

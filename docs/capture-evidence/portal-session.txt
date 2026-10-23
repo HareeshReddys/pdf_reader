@@ -1,0 +1,6 @@
+AvailableSourceTypes: 3
+Request: /org/freedesktop/portal/desktop/request/1_485/copilot_735776e170394222978e6e51adea4ebd
+Response: {'code': 0, 'results': dbus.Dictionary({dbus.String('session_handle'): dbus.String('/org/freedesktop/portal/desktop/session/1_485/session_790b899be09f41c48614e60cb665429a', variant_level=1)}, signature=dbus.Signature('sv'))}
+Request: /org/freedesktop/portal/desktop/request/1_485/copilot_426d9cd069da48d8bf59163bb20bca9d
+Response: {'code': 0, 'results': dbus.Dictionary({}, signature=dbus.Signature('sv'))}
+CreateSession and SelectSources verified. Start/OpenPipeWireRemote require --start and native user selection.

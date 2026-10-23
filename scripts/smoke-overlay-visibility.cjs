@@ -1,0 +1,45 @@
+const assert=require('node:assert/strict');
+const {app,screen,BrowserWindow}=require('electron');
+let other;
+app.whenReady().then(async()=>{const overlay=require('../dist/main/services/overlayService');try{
+ require('../dist/main/ipc').registerIpcHandlers();
+ const window=overlay.createOverlayWindow();await new Promise(r=>window.webContents.once('did-finish-load',r));
+ window.setBounds({x:-10000,y:-10000,width:600,height:720});window.hide();
+ overlay.showOverlay();const bounds=window.getBounds(),area=screen.getPrimaryDisplay().workArea;
+ assert.ok(window.isVisible());assert.ok(!window.isMinimized());
+ assert.equal(window.isFocusable(),true,'Deliberate overlay interaction must be allowed to receive focus');
+ assert.equal(window.isFocused(),false);
+ assert.ok(window.isAlwaysOnTop(),'Overlay must stay in the native topmost window band');
+ assert.ok(bounds.x>=area.x&&bounds.y>=area.y&&bounds.x+bounds.width<=area.x+area.width&&bounds.y+bounds.height<=area.y+area.height);
+ const controls=await window.webContents.executeJavaScript("[...document.querySelectorAll('button,input')].map(e=>e.getAttribute('aria-label'))");
+ for(const label of ['Answer background opacity','Previous question','Next question','Start Voice text mirror'])assert.ok(controls.includes(label),label+' must remain in existing overlay');
+ assert.ok(controls.includes('Resize overlay'));
+ overlay.setOverlayClickThrough(true);
+ await window.webContents.executeJavaScript(`(()=>{
+   const grip=document.querySelector('[aria-label="Resize overlay"]');
+   // Synthetic events have no native pointer capture; test the real grip -> IPC -> native bounds path.
+   grip.setPointerCapture=()=>{};grip.releasePointerCapture=()=>{};
+   grip.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,screenX:100,screenY:100,pointerId:1}));
+   grip.dispatchEvent(new PointerEvent('pointermove',{bubbles:true,screenX:160,screenY:140,pointerId:1}));
+   grip.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,pointerId:1}));
+ })()`);
+ for(let i=0;i<50&&window.getBounds().width===bounds.width;i++)await new Promise(r=>setTimeout(r,20));
+ assert.ok(window.getBounds().width>bounds.width,'Resize grip changes native width with click-through enabled');
+ assert.equal(window.isFocused(),false,'Resizing must not take keyboard focus');
+ other=new BrowserWindow({show:false});await other.loadURL('data:text/html,<input aria-label="Other window input">');
+ const waitForFocus=async target=>{for(let i=0;i<100&&!target.isFocused();i++)await new Promise(r=>setTimeout(r,20));assert.ok(target.isFocused(),'Requested window must retain focus');};
+ other.show();other.focus();await waitForFocus(other);
+ overlay.showOverlay();await new Promise(r=>setTimeout(r,100));
+ assert.ok(other.isFocused(),'Showing the overlay must preserve the other application focus');
+ window.focus();await waitForFocus(window);
+ await window.webContents.executeJavaScript("document.querySelector('[aria-label=\"Answer background opacity\"]').focus()");
+ window.webContents.sendInputEvent({type:'keyDown',keyCode:'Left'});window.webContents.sendInputEvent({type:'keyUp',keyCode:'Left'});
+ await new Promise(r=>setTimeout(r,100));assert.ok(window.isFocused(),'Overlay controls retain focus during interaction');
+ other.focus();await waitForFocus(other);
+ overlay.updateOverlayPartial('Updated answer without activation',overlay.beginOverlayWork('Focus check'));
+ await new Promise(r=>setTimeout(r,100));assert.ok(other.isFocused(),'Streaming an answer must not pull focus back');
+ assert.throws(()=>overlay.resizeOverlay(600,600,-1),/Only the overlay/);
+ assert.throws(()=>overlay.resizeOverlay(NaN,600,window.webContents.id),/Invalid/);
+ const resized=window.getBounds();window.hide();overlay.showOverlay();assert.equal(window.getBounds().width,resized.width,'Showing the overlay preserves resized dimensions');
+ console.log('PASS off-screen overlay restored inside primary display; original slider, question navigation and Voice controls retained.');
+ }catch(e){console.error(e);process.exitCode=1;}finally{other?.destroy();overlay.destroyOverlayWindow();app.exit(process.exitCode||0);}});

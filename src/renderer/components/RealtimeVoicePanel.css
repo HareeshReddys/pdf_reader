@@ -1,0 +1,12 @@
+.realtime-voice-panel { gap: 12px; }
+.realtime-voice-panel h2, .realtime-voice-panel p { margin: 0; }
+.realtime-voice-panel h2 { font-size: 20px; }
+.realtime-voice-panel p { font-size: 12px; line-height: 1.55; color: #52665b; }
+.realtime-voice-panel [role="status"] { font-size: 12px; font-weight: 700; color: #176c4f; }
+.realtime-voice-panel [role="alert"] { color: #a22828; }
+.realtime-voice-panel .button-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.realtime-voice-panel button, .realtime-voice-panel select { min-height: 34px; max-width: 100%; padding: 7px 10px; border: 1px solid #c6d4cc; border-radius: 7px; background: white; color: #17241f; font-size: 12px; }
+.realtime-voice-panel button { cursor: pointer; }
+.realtime-voice-panel button:disabled { cursor: default; opacity: .5; }
+.realtime-voice-panel select { flex: 1 1 180px; min-width: 0; }
+.realtime-voice-panel button:focus-visible, .realtime-voice-panel select:focus-visible { outline: 2px solid #176c4f; outline-offset: 2px; }

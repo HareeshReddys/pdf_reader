@@ -1,0 +1,81 @@
+{
+  "excludedXid": "0x5600004",
+  "windows": [
+    {
+      "xid": "0x3c0012c",
+      "read": true,
+      "size": [
+        3840,
+        2160
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "xid": "0x3c00130",
+      "read": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "position": [
+        3840,
+        1238
+      ]
+    },
+    {
+      "xid": "0x500000c",
+      "read": false,
+      "error": "Window is not available as a redirected pixmap"
+    },
+    {
+      "xid": "0x5400007",
+      "read": true,
+      "size": [
+        1189,
+        609
+      ],
+      "position": [
+        4229,
+        1682
+      ]
+    },
+    {
+      "xid": "0x2400004",
+      "read": true,
+      "size": [
+        3840,
+        2160
+      ],
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "xid": "0x600004",
+      "read": true,
+      "size": [
+        1834,
+        1053
+      ],
+      "position": [
+        3926,
+        1265
+      ]
+    },
+    {
+      "xid": "0x5600004",
+      "excluded": true
+    }
+  ],
+  "limits": [
+    "Pixmap RGB layout assumes the verified root TrueColor channel layout; per-window alpha ignored",
+    "No cursor, wallpaper, decorations or alpha correctness guarantee",
+    "One frame; no FPS or CPU/GPU target demonstrated",
+    "Does not replace Chrome/Meet/Zoom/Teams/Discord monitor capture"
+  ],
+  "oneFrameSeconds": 0.212
+}

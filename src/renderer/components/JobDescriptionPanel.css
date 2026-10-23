@@ -1,0 +1,10 @@
+.job-description-panel { border: 1px solid #d9e2ef; border-radius: 12px; padding: 14px 16px; background: #f8fafc; margin-bottom: 14px; }
+.job-description-panel summary { cursor: pointer; font-weight: 600; }
+.job-description-panel summary span { font-weight: 400; font-size: 12px; color: #53657e; margin-left: 12px; }
+.job-description-panel label { display: block; margin: 14px 0 8px; font-size: 13px; }
+.job-description-panel textarea { box-sizing: border-box; width: 100%; resize: vertical; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }
+.job-description-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.job-description-actions button { padding: 7px 12px; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; }
+.job-description-actions button:disabled { opacity: .5; cursor: default; }
+.job-description-panel p, .job-description-panel small { color: #53657e; font-size: 12px; line-height: 1.5; }
+.job-description-panel [role="alert"] { color: #b91c1c; }

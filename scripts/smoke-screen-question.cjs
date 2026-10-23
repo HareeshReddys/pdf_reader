@@ -1,0 +1,17 @@
+const assert = require('node:assert/strict');
+const { extractScreenQuestion, sameScreenQuestion } = require('../dist/shared/screenQuestion');
+const question = 'How would you update one million database records safely?';
+const first = extractScreenQuestion(`Interview\nQuestion 2 of 10\n12:30\n${question}\nCode editor\nconst answer = 1;`);
+const typed = extractScreenQuestion(`Interview\nQuestion 2 of 10\n11:29\n${question}\nCode editor\nconst answer = 1000;\nOutput\nSyntaxError`);
+assert.equal(first, question);
+assert.equal(first, typed);
+assert.equal(sameScreenQuestion(first, typed), true);
+assert.equal(sameScreenQuestion(first, 'How would you migrate a database without downtime?'), false);
+assert.equal(sameScreenQuestion('Find the minimum value in an array.', 'Find the maximum value in an array.'), false);
+assert.equal(sameScreenQuestion('Process 500 records per batch.', 'Process 1000 records per batch.'), false);
+assert.equal(sameScreenQuestion('Find a balance point for -1 and 2.', 'Find a balance point for 1 and 2.'), false);
+assert.equal(sameScreenQuestion('Explain C++ memory management.', 'Explain C# memory management.'), false);
+assert.equal(extractScreenQuestion('Console\nSyntaxError\nfunction answer() {}'), '');
+assert.equal(extractScreenQuestion('return array.filter(value => value > 100);'), '');
+assert.equal(extractScreenQuestion('Problem statement\nGiven an array of numbers, find the first balance point.\nYour answer\nreturn -1;'), 'Given an array of numbers, find the first balance point.');
+console.log('PASS: question identity ignores editor/clock changes, recognizes new questions and numeric/operator changes, and rejects unreadable layouts.');
